@@ -65,4 +65,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Menu management (admin/manager only)
     Route::put('menu/{id}/availability', [MenuController::class, 'updateAvailability']);
     Route::get('menu/stats', [MenuController::class, 'stats']);
+
+    // QR Codes (admin/manager only)
+    Route::get('qr-codes/tables/{tableId}', [App\Http\Controllers\WhatsApp\QRCodeController::class, 'show']);
+    Route::post('qr-codes/tables/{tableId}/generate', [App\Http\Controllers\WhatsApp\QRCodeController::class, 'generate']);
+    Route::post('qr-codes/generate-all', [App\Http\Controllers\WhatsApp\QRCodeController::class, 'generateAll']);
+});
+
+// WhatsApp webhook routes (no authentication required)
+Route::prefix('webhooks')->group(function () {
+    Route::get('whatsapp', [App\Http\Controllers\WhatsApp\WebhookController::class, 'verify']);
+    Route::post('whatsapp', [App\Http\Controllers\WhatsApp\WebhookController::class, 'handle']);
 });
